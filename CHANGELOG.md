@@ -1,6 +1,6 @@
 # 更新日誌 (CHANGELOG)
 
-本文檔記錄 OnHeritage 專案的所有重要變更。
+本文檔記錄 onHeir 專案的所有重要變更。
 
 ---
 
