@@ -116,6 +116,34 @@
 
 ---
 
+## 技术栈
+
+### 前端
+- **框架**：Next.js (App Router)
+- **语言**：TypeScript
+- **样式**：Tailwind CSS
+- **组件库**：Shadcn/ui（基于 Radix UI）
+
+### 后端 & API
+- **API**：Next.js API Routes
+- **数据库 ORM**：Prisma
+- **认证**：NextAuth.js v5
+
+### 数据库
+- **开发/早期生产**：SQLite
+  - ✅ 无需安装，文件存储，快速启动
+  - ✅ 适合快速迭代和开发
+  - ✅ 后来可以轻松迁移到 PostgreSQL
+- **生产环境（未来）**：PostgreSQL
+  - 更好的并发性能
+  - 更适合高负载场景
+
+### 状态管理
+- **全局状态**：Zustand
+- **表单处理**：React Hook Form + Zod
+
+---
+
 ## 开发计划
 
 **开发原则**：分部分逐步开发，UI 设计符合现代最佳实践
