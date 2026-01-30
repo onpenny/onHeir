@@ -15,6 +15,7 @@
 ### 待办
 - [ ] 初始化 Next.js 项目
 - [ ] 配置 TypeScript 和 Tailwind CSS
+- [ ] 配置 Prisma + SQLite
 - [ ] 设计数据库架构
 - [ ] 设计 UI/UX 原型
 
