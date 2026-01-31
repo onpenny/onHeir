@@ -1,14 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
-import { Plus, Edit, Trash2, Bank, Shield, Home, TrendingUp, Coins } from "lucide-react";
+import { Plus, Edit, Trash2, Bank, Shield, Home, TrendingUp, Coins, PieChart } from "lucide-react";
 import AssetForm from "@/components/ui/asset-form";
+import AllocationForm from "@/components/ui/allocation-form";
 
 export default function AssetsPage() {
   const [assets, setAssets] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [showAllocationForm, setShowAllocationForm] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const loadAssets = async () => {
@@ -218,7 +218,7 @@ export default function AssetsPage() {
                 )}
 
                 {asset.description && (
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-gray-600 text-sm mb-3">
                     {asset.description}
                   </p>
                 )}
@@ -249,21 +249,42 @@ export default function AssetsPage() {
                     </span>
                   </p>
                 </div>
+
+                {/* 分配規則按鈕 */}
+                <button
+                  onClick={() => setShowAllocationForm(asset)}
+                  className="w-full mt-4 flex items-center justify-center space-x-2 bg-purple-50 text-purple-700 py-2 px-4 rounded-lg hover:bg-purple-100 transition-colors"
+                >
+                  <PieChart size={18} />
+                  <span>管理分配規則</span>
+                </button>
               </div>
             ))}
           </div>
         )}
-
-        {showForm && (
-          <AssetForm
-            onSuccess={() => {
-              setShowForm(false);
-              loadAssets();
-            }}
-            onClose={() => setShowForm(false)}
-          />
-        )}
       </main>
+
+      {showForm && (
+        <AssetForm
+          onSuccess={() => {
+            setShowForm(false);
+            loadAssets();
+          }}
+          onClose={() => setShowForm(false)}
+        />
+      )}
+
+      {showAllocationForm && (
+        <AllocationForm
+          assetId={showAllocationForm.id}
+          assetName={showAllocationForm.name}
+          onSuccess={() => {
+            setShowAllocationForm(null);
+            loadAssets();
+          }}
+          onClose={() => setShowAllocationForm(null)}
+        />
+      )}
     </div>
   );
 }
