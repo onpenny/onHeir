@@ -4,11 +4,14 @@ import { useState, useEffect } from "react";
 import { Plus, Edit, Trash2, Bank, Shield, Home, TrendingUp, Coins, PieChart } from "lucide-react";
 import AssetForm from "@/components/ui/asset-form";
 import AllocationForm from "@/components/ui/allocation-form";
+import EditAssetForm from "@/components/ui/edit-asset-form";
 
 export default function AssetsPage() {
   const [assets, setAssets] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
   const [showAllocationForm, setShowAllocationForm] = useState<any>(null);
+  const [editingAsset, setEditingAsset] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const loadAssets = async () => {
@@ -76,6 +79,11 @@ export default function AssetsPage() {
     } catch (error) {
       console.error("刪除資產失敗:", error);
     }
+  };
+
+  const handleEdit = (asset: any) => {
+    setEditingAsset(asset);
+    setShowEditForm(true);
   };
 
   const totalValue = assets.reduce((sum, asset) => sum + (asset.value || 0), 0);
@@ -195,7 +203,7 @@ export default function AssetsPage() {
                   </div>
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => {/* TODO: 编辑功能 */}}
+                      onClick={() => handleEdit(asset)}
                       className="text-gray-400 hover:text-blue-600 transition-colors"
                     >
                       <Edit size={18} />
@@ -283,6 +291,21 @@ export default function AssetsPage() {
             loadAssets();
           }}
           onClose={() => setShowAllocationForm(null)}
+        />
+      )}
+
+      {showEditForm && editingAsset && (
+        <EditAssetForm
+          assetId={editingAsset.id}
+          onSuccess={() => {
+            setShowEditForm(false);
+            setEditingAsset(null);
+            loadAssets();
+          }}
+          onClose={() => {
+            setShowEditForm(false);
+            setEditingAsset(null);
+          }}
         />
       )}
     </div>
