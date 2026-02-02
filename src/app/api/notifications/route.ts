@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 
-// GET - 獲取用戶的所有通知
+// GET - 獲取用戶的通知
 export async function GET(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
       orderBy: {
         createdAt: "desc",
       },
-      take: 50,
+      take: 50, // 只返回最近50條
     });
 
     return NextResponse.json(notifications);
@@ -35,8 +35,50 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST - 標記通知為已讀
+// POST - 創建通知
 export async function POST(req: NextRequest) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json(
+        { error: "未授權" },
+        { status: 401 }
+      );
+    }
+
+    const body = await req.json();
+    const { type, title, message } = body;
+
+    if (!type || !title || !message) {
+      return NextResponse.json(
+        { error: "請填寫通知類型、標題和消息" },
+        { status: 400 }
+      );
+    }
+
+    const notification = await prisma.notification.create({
+      data: {
+        userId: session.user.id,
+        type,
+        title,
+        message,
+        isRead: false,
+      },
+    });
+
+    return NextResponse.json(notification, { status: 201 });
+  } catch (error) {
+    console.error("創建通知錯誤:", error);
+    return NextResponse.json(
+      { error: "創建通知失敗" },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT - 標記通知為已讀
+export async function PUT(req: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
